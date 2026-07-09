@@ -1,377 +1,507 @@
-import { Playfair_Display, Inter } from 'next/font/google';
+'use client';
+
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
-import { motion } from 'framer-motion';
-import { Star, Phone, MapPin, ChevronRight, Menu, X } from 'lucide-react';
-import { useState } from 'react';
+import {
+  Star,
+  Phone,
+  MapPin,
+  Menu,
+  X,
+  ChevronRight,
+  Quote,
+  ShoppingBag,
+  Award,
+  ShieldCheck,
+  Users,
+} from 'lucide-react';
 
-const playfair = Playfair_Display({ subsets: ['latin'], weight: ['500', '600', '700'] });
-const inter = Inter({ subsets: ['latin'], weight: ['400', '500', '600', '700'] });
+const BrandStation = () => {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-export default function Page() {
-  const [menuOpen, setMenuOpen] = useState(false);
+  const navLinks = ['Home', 'About', 'Products', 'Testimonials', 'Contact'];
+
+  const services = [
+    {
+      icon: ShoppingBag,
+      title: 'Premium Men’s Apparel',
+      description: 'Fashion-forward & classic styles for every occasion.',
+    },
+    {
+      icon: Award,
+      title: 'Excellent Fabric Quality',
+      description: 'Handpicked materials that last and feel great.',
+    },
+    {
+      icon: Users,
+      title: 'Personalized Styling',
+      description: 'Expert advice from Gagan sir and Salman bhai.',
+    },
+    {
+      icon: ShieldCheck,
+      title: 'Value for Money',
+      description: 'Unbeatable quality at fair prices.',
+    },
+  ];
+
+  const testimonials = [
+    {
+      name: 'Customer',
+      rating: 5,
+      time: '7 months ago',
+      text: 'Great place to shop premium quality in a good price, shopping since 7-8 years. Fully satisfied with the quality. Gagan sir is a great consultant and owner himself, make sure to consult and take suggestions before buying. Cheers to the Polite salesperson salman bhai.',
+    },
+    {
+      name: 'Customer',
+      rating: 5,
+      time: '6 months ago',
+      text: 'I\'ve had a great experience doing my shopping at BRAND STATION! The amount of styles — ranging from fashion-forward outfits to classic designs — is remarkable. The quality of the fabrics is excellent, and the prices are fair considering what you receive. The staff are friendly and never fail to assist with recommendations, fittings, and styling advice. The shop is spotlessly clean, well-arranged, and a pleasure to shop. Whether you\'re picking up something for a regular day or a special event, this store never fails. Strongly recommend to anyone who wants quality fashion and a welcoming shopping experience! Thanks',
+    },
+    {
+      name: 'Customer',
+      rating: 5,
+      time: 'a month ago',
+      text: 'Sardaar ji is very friendly. Items are value for money. All the items are hand picked.',
+    },
+    {
+      name: 'Customer',
+      rating: 5,
+      time: '6 months ago',
+      text: 'I’m very satisfied with the clothes. The material quality is outstanding and it delivers exactly as promised. Packaging and overall presentation were also good 👍',
+    },
+    {
+      name: 'Customer',
+      rating: 5,
+      time: '5 months ago',
+      text: 'Collection is very unique and price is so affordable another thing which is more important Quality is next level. If you\'re looking for genuine products, You must visit here.',
+    },
+  ];
+
+  const galleryImages = [
+    {
+      src: 'https://img.magicpin.com/8087355_cover_0.jpg',
+      alt: 'Brand Station storefront',
+    },
+    {
+      src: 'https://img.magicpin.com/8087355_store_images_7.jpg',
+      alt: 'Product display inside store',
+    },
+    {
+      src: 'https://img.magicpin.com/8087355_store_images_1.jpg',
+      alt: 'Clothing rack with men’s fashion',
+    },
+    {
+      src: 'https://images.jdmagicbox.com/v2/comp/delhi/k5/011pxx11.xx11.200522042322.x2k5/catalogue/brand-station-shahdara-delhi-kurta-pyjama-wholesalers-2pfyvuke65.jpg',
+      alt: 'Kurta pyjama collection',
+    },
+    {
+      src: 'https://images.jdmagicbox.com/v2/comp/delhi/k5/011pxx11.xx11.200522042322.x2k5/catalogue/brand-station-shahdara-delhi-kurta-pyjama-wholesalers-ffw0rd4stq.jpg',
+      alt: 'Another view of men’s wear',
+    },
+  ];
+
+  const fadeInUp = {
+    hidden: { opacity: 0, y: 30 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeOut' as const } },
+  };
+
+  const staggerContainer = {
+    hidden: {},
+    visible: { transition: { staggerChildren: 0.15 } },
+  };
 
   return (
-    <div className={`${inter.className} bg-[#F5F1EB] text-[#1E1E1E]`}>
+    <div className="min-h-screen bg-[#F5F1EB] font-['Inter'] text-[#1E1E1E]">
       {/* Navigation */}
       <nav className="sticky top-0 z-50 bg-[#1A2B3C] shadow-md">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 md:px-8">
-          <Link href="/" className={`${playfair.className} text-2xl font-bold text-white`}>
-            <span className="text-[#C89B3C]">Brand</span> Station
-          </Link>
-          <ul className="hidden items-center gap-8 md:flex">
-            <li><Link href="#" className="text-[#E4DDD4] hover:text-white transition-colors">Home</Link></li>
-            <li><Link href="#" className="text-[#E4DDD4] hover:text-white transition-colors">Products</Link></li>
-            <li><Link href="#" className="text-[#E4DDD4] hover:text-white transition-colors">Testimonials</Link></li>
-            <li><Link href="#" className="text-[#E4DDD4] hover:text-white transition-colors">Contact</Link></li>
-          </ul>
-          <button
-            className="block md:hidden text-white p-2"
-            onClick={() => setMenuOpen(!menuOpen)}
-            aria-label="Toggle menu"
-          >
-            {menuOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+          <div className="flex h-16 items-center justify-between">
+            {/* Logo */}
+            <Link href="/" className="flex items-center">
+              <span className="font-['Playfair_Display'] text-2xl font-bold text-[#C89B3C]">
+                Brand
+              </span>
+              <span className="font-['Playfair_Display'] text-2xl font-bold text-white">
+                {' '}Station
+              </span>
+            </Link>
+
+            {/* Desktop Nav */}
+            <div className="hidden items-center space-x-8 md:flex">
+              {navLinks.map((link) => (
+                <Link
+                  key={link}
+                  href={`#${link.toLowerCase()}`}
+                  className="text-sm font-medium text-[#E4DDD4] transition-colors hover:text-white"
+                >
+                  {link}
+                </Link>
+              ))}
+            </div>
+
+            {/* Mobile menu button */}
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="inline-flex h-11 w-11 items-center justify-center rounded-md text-[#E4DDD4] transition-colors hover:text-white md:hidden"
+              aria-label="Toggle menu"
+            >
+              {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            </button>
+          </div>
         </div>
-        {menuOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="md:hidden bg-[#1A2B3C] px-4 pb-4"
-          >
-            <ul className="flex flex-col gap-3">
-              <li><Link href="#" className="text-[#E4DDD4] hover:text-white transition-colors" onClick={() => setMenuOpen(false)}>Home</Link></li>
-              <li><Link href="#" className="text-[#E4DDD4] hover:text-white transition-colors" onClick={() => setMenuOpen(false)}>Products</Link></li>
-              <li><Link href="#" className="text-[#E4DDD4] hover:text-white transition-colors" onClick={() => setMenuOpen(false)}>Testimonials</Link></li>
-              <li><Link href="#" className="text-[#E4DDD4] hover:text-white transition-colors" onClick={() => setMenuOpen(false)}>Contact</Link></li>
-            </ul>
-          </motion.div>
-        )}
+
+        {/* Mobile Menu */}
+        <AnimatePresence>
+          {mobileMenuOpen && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.3 }}
+              className="overflow-hidden bg-[#1A2B3C] md:hidden"
+            >
+              <div className="space-y-1 px-4 pb-4">
+                {navLinks.map((link) => (
+                  <Link
+                    key={link}
+                    href={`#${link.toLowerCase()}`}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="block rounded-md px-3 py-2 text-base font-medium text-[#E4DDD4] transition-colors hover:bg-[#243E52] hover:text-white"
+                  >
+                    {link}
+                  </Link>
+                ))}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </nav>
 
-      {/* Hero */}
-      <section className="relative bg-[#1A2B3C] text-white overflow-hidden">
-        <div className="absolute inset-0 opacity-20">
-          <Image
-            src="https://img.magicpin.com/8087355_cover_0.jpg"
-            alt="Brand Station store"
-            fill
-            className="object-cover"
-          />
-        </div>
-        <div className="relative z-10 mx-auto max-w-7xl px-4 py-20 md:py-32 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="max-w-2xl"
-          >
-            <h1 className={`${playfair.className} text-4xl font-bold leading-tight md:text-6xl`}>
-              Shahdara's Destination for Premium Men's Fashion
-            </h1>
-            <p className="mt-6 text-lg text-[#D4CCC2] md:text-xl">
-              Quality Styles, Unbeatable Value.
-            </p>
-            <div className="mt-8 flex flex-wrap items-center gap-4">
-              <div className="flex items-center gap-1">
-                {[...Array(5)].map((_, i) => (
-                  <Star
-                    key={i}
-                    size={20}
-                    className={i < 4 ? 'fill-[#C89B3C] text-[#C89B3C]' : 'fill-[#D4CCC2] text-[#D4CCC2]'}
-                  />
-                ))}
-                <span className="ml-2 text-sm text-[#D4CCC2]">4.6 (186 reviews)</span>
-              </div>
-            </div>
-            <div className="mt-8 flex flex-wrap gap-4">
-              <Link
-                href="#contact"
-                className="rounded-md bg-[#C89B3C] px-6 py-3 font-semibold text-white shadow transition-all hover:bg-[#DBA94D] hover:shadow-lg"
-              >
-                Visit Us Today
-              </Link>
-              <Link
-                href="#testimonials"
-                className="rounded-md border-2 border-white px-6 py-3 font-semibold text-white transition-all hover:bg-white hover:text-[#1A2B3C]"
-              >
-                See Reviews
-              </Link>
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Services */}
-      <section className="mx-auto max-w-7xl px-4 py-16 md:py-24 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="mb-12 text-center"
-        >
-          <h2 className={`${playfair.className} text-3xl font-bold md:text-4xl`}>
-            What We Offer
-          </h2>
-          <hr className="mx-auto mt-4 w-24 border-t-2 border-[#C89B3C]" />
-        </motion.div>
-        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
-          {[
-            { title: 'Premium Men’s Apparel', desc: 'Curated collections for every occasion – from casual to formal.' },
-            { title: 'Fashion-Forward & Classic Styles', desc: 'Trendsetting designs meet timeless silhouettes.' },
-            { title: 'Excellent Fabric Quality', desc: 'Only the finest materials, hand-picked for durability and comfort.' },
-            { title: 'Personalized Styling Advice', desc: 'Our experts help you find the perfect look.' },
-            { title: 'Value for Money Collections', desc: 'Premium fashion at prices that respect your wallet.' },
-            { title: 'Trusted Since Years', desc: 'Serving Shahdara with pride – your satisfaction is our legacy.' },
-          ].map((service, idx) => (
+      {/* Hero Section */}
+      <section id="home" className="relative overflow-hidden bg-[#1A2B3C]">
+        <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-28">
+          <div className="grid items-center gap-12 lg:grid-cols-2">
+            {/* Text Content */}
             <motion.div
-              key={idx}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: idx * 0.1 }}
-              className="rounded-lg bg-white p-6 shadow-sm transition-all hover:-translate-y-1 hover:shadow-md"
+              initial="hidden"
+              animate="visible"
+              variants={staggerContainer}
+              className="space-y-6"
             >
-              <div className="mb-3 h-10 w-10 rounded-full bg-[#C89B3C] flex items-center justify-center text-white font-bold text-lg">
-                {idx + 1}
-              </div>
-              <h3 className={`${playfair.className} text-xl font-semibold`}>{service.title}</h3>
-              <p className="mt-2 text-[#6B6258]">{service.desc}</p>
+              <motion.h1
+                variants={fadeInUp}
+                className="font-['Playfair_Display'] text-4xl font-bold leading-tight text-white sm:text-5xl lg:text-6xl"
+              >
+                Shahdara's Destination for{' '}
+                <span className="text-[#C89B3C]">Premium Men's Fashion</span>
+              </motion.h1>
+              <motion.p
+                variants={fadeInUp}
+                className="text-lg text-[#E4DDD4] sm:text-xl"
+              >
+                Quality Styles, Unbeatable Value.
+              </motion.p>
+              <motion.div variants={fadeInUp} className="flex flex-wrap gap-4">
+                <Link
+                  href="#products"
+                  className="inline-flex items-center rounded-md bg-[#C89B3C] px-6 py-3 text-sm font-semibold text-white shadow transition-all hover:bg-[#DBA94D] hover:shadow-lg"
+                >
+                  Explore Collection
+                  <ChevronRight className="ml-2 h-4 w-4" />
+                </Link>
+                <Link
+                  href="#contact"
+                  className="inline-flex items-center rounded-md border-2 border-white px-6 py-3 text-sm font-semibold text-white transition-all hover:bg-white hover:text-[#1A2B3C]"
+                >
+                  Visit Us
+                </Link>
+              </motion.div>
+              <motion.div
+                variants={fadeInUp}
+                className="flex items-center gap-3 text-[#E4DDD4]"
+              >
+                <div className="flex items-center gap-1 text-[#C89B3C]">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="h-5 w-5 fill-current" />
+                  ))}
+                </div>
+                <span className="text-sm font-medium">4.6 (186 reviews)</span>
+              </motion.div>
             </motion.div>
-          ))}
+
+            {/* Hero Image */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.8 }}
+              className="relative aspect-[4/3] w-full overflow-hidden rounded-lg shadow-2xl"
+            >
+              <Image
+                src="https://img.magicpin.com/8087355_cover_0.jpg"
+                alt="Brand Station storefront"
+                fill
+                className="object-cover"
+                sizes="(max-width: 768px) 100vw, 50vw"
+              />
+            </motion.div>
+          </div>
         </div>
+        {/* Decorative bottom gradient */}
+        <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-[#F5F1EB] to-transparent" />
       </section>
 
-      {/* Image Gallery */}
-      <section className="bg-white py-16 md:py-24">
-        <div className="mx-auto max-w-7xl px-4 lg:px-8">
+      {/* About / Services */}
+      <section id="about" className="py-16 sm:py-20 lg:py-24">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="mb-12 text-center"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-100px' }}
+            variants={staggerContainer}
+            className="text-center"
           >
-            <h2 className={`${playfair.className} text-3xl font-bold md:text-4xl`}>
-              Our Collections
-            </h2>
-            <hr className="mx-auto mt-4 w-24 border-t-2 border-[#C89B3C]" />
+            <motion.h2
+              variants={fadeInUp}
+              className="font-['Playfair_Display'] text-3xl font-bold text-[#1A2B3C] sm:text-4xl lg:text-5xl"
+            >
+              Why Choose Brand Station
+            </motion.h2>
+            <motion.p
+              variants={fadeInUp}
+              className="mx-auto mt-4 max-w-2xl text-lg text-[#6B6258]"
+            >
+              A trusted name in Shahdara for over 8 years — premium fashion without the premium price.
+            </motion.p>
           </motion.div>
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {[
-              { src: 'https://img.magicpin.com/8087355_store_images_7.jpg', alt: 'Brand Station store interior' },
-              { src: 'https://img.magicpin.com/8087355_store_images_1.jpg', alt: 'Brand Station clothing display' },
-              { src: 'https://images.jdmagicbox.com/v2/comp/delhi/k5/011pxx11.xx11.200522042322.x2k5/catalogue/brand-station-shahdara-delhi-kurta-pyjama-wholesalers-2pfyvuke65.jpg', alt: 'Kurta pyjama collection' },
-              { src: 'https://images.jdmagicbox.com/v2/comp/delhi/k5/011pxx11.xx11.200522042322.x2k5/catalogue/brand-station-shahdara-delhi-kurta-pyjama-wholesalers-ffw0rd4stq.jpg', alt: 'Brand Station products' },
-              { src: 'https://img.magicpin.com/8087355_cover_0.jpg', alt: 'Brand Station store front' },
-            ].map((img, idx) => (
+
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-100px' }}
+            variants={staggerContainer}
+            className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-4"
+          >
+            {services.map((service, index) => (
               <motion.div
-                key={idx}
-                initial={{ opacity: 0, scale: 0.95 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: idx * 0.1 }}
-                className="group relative h-64 overflow-hidden rounded-lg shadow-sm"
+                key={index}
+                variants={fadeInUp}
+                className="rounded-lg bg-white p-6 shadow-[0_2px_8px_rgba(26,43,60,0.06)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_24px_rgba(26,43,60,0.1)]"
               >
-                <Image src={img.src} alt={img.alt} fill className="object-cover transition-transform duration-500 group-hover:scale-105" />
+                <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-md bg-[#1A2B3C]/10 text-[#1A2B3C]">
+                  <service.icon className="h-6 w-6" />
+                </div>
+                <h3 className="font-['Playfair_Display'] text-xl font-semibold text-[#1A2B3C]">
+                  {service.title}
+                </h3>
+                <p className="mt-2 text-sm text-[#6B6258]">{service.description}</p>
               </motion.div>
             ))}
-          </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Gallery / Products */}
+      <section id="products" className="bg-[#FFFFFF] py-16 sm:py-20 lg:py-24">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-100px' }}
+            variants={staggerContainer}
+            className="text-center"
+          >
+            <motion.h2
+              variants={fadeInUp}
+              className="font-['Playfair_Display'] text-3xl font-bold text-[#1A2B3C] sm:text-4xl lg:text-5xl"
+            >
+              Our Collection
+            </motion.h2>
+            <motion.p
+              variants={fadeInUp}
+              className="mx-auto mt-4 max-w-2xl text-lg text-[#6B6258]"
+            >
+              From everyday staples to special occasion wear — each piece handpicked for you.
+            </motion.p>
+          </motion.div>
+
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-100px' }}
+            variants={staggerContainer}
+            className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
+          >
+            {galleryImages.map((image, index) => (
+              <motion.div
+                key={index}
+                variants={fadeInUp}
+                className="group relative aspect-[4/5] overflow-hidden rounded-lg bg-[#F5F1EB] shadow-[0_2px_8px_rgba(26,43,60,0.06)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_24px_rgba(26,43,60,0.1)]"
+              >
+                <Image
+                  src={image.src}
+                  alt={image.alt}
+                  fill
+                  className="object-cover transition-transform duration-500 group-hover:scale-110"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                />
+                {/* Overlay on hover */}
+                <div className="absolute inset-0 bg-gradient-to-t from-[#1A2B3C]/70 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                <div className="absolute bottom-0 left-0 right-0 p-4 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                  <span className="inline-block rounded bg-[#C89B3C] px-3 py-1 text-xs font-semibold uppercase text-white">
+                    View
+                  </span>
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
         </div>
       </section>
 
       {/* Testimonials */}
-      <section id="testimonials" className="mx-auto max-w-7xl px-4 py-16 md:py-24 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="mb-12 text-center"
-        >
-          <h2 className={`${playfair.className} text-3xl font-bold md:text-4xl`}>
-            What Our Customers Say
-          </h2>
-          <hr className="mx-auto mt-4 w-24 border-t-2 border-[#C89B3C]" />
-        </motion.div>
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-          {[
-            {
-              text: 'Great place to shop premium quality in a good price, shopping since 7-8 years. Fully satisfied with the quality. Gagan sir is a great consultant and owner himself, make sure to consult and take suggestions before buying.\nCheers to the Polite salesperson salman bhai.',
-              stars: 5,
-              author: 'Customer',
-              date: '7 months ago',
-            },
-            {
-              text: "I've had a great experience doing my shopping at BRAND STATION! The amount of styles — ranging from fashion-forward outfits to classic designs — is remarkable. The quality of the fabrics is excellent, and the prices are fair considering what you receive.\n\nThe staff are friendly and never fail to assist with recommendations, fittings, and styling advice. The shop is spotlessly clean, well-arranged, and a pleasure to shop. Whether you're picking up something for a regular day or a special event, this store never fails.\n\nStrongly recommend to anyone who wants quality fashion and a welcoming shopping experience!\nThanks",
-              stars: 5,
-              author: 'Customer',
-              date: '6 months ago',
-            },
-            {
-              text: 'Sardaar ji is very friendly. Items are value for money. All the items are hand picked.',
-              stars: 5,
-              author: 'Customer',
-              date: 'a month ago',
-            },
-            {
-              text: 'I’m very satisfied with the clothes. The material quality is outstanding and it delivers exactly as promised. Packaging and overall presentation were also good 👍',
-              stars: 5,
-              author: 'Customer',
-              date: '6 months ago',
-            },
-            {
-              text: "Collection is very unique and price is so affordable another thing which is more important Quality is next level. If you're looking for genuine products, You must visit here.",
-              stars: 5,
-              author: 'Customer',
-              date: '5 months ago',
-            },
-          ].map((review, idx) => (
-            <motion.div
-              key={idx}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: idx * 0.1 }}
-              className="rounded-lg bg-white p-6 shadow-sm transition-all hover:shadow-md"
-            >
-              <div className="mb-3 flex items-center gap-1">
-                {[...Array(5)].map((_, i) => (
-                  <Star
-                    key={i}
-                    size={16}
-                    className={i < review.stars ? 'fill-[#C89B3C] text-[#C89B3C]' : 'fill-[#D4CCC2] text-[#D4CCC2]'}
-                  />
-                ))}
-              </div>
-              <blockquote className="border-l-4 border-[#C89B3C] pl-4 italic text-[#1E1E1E]">
-                {review.text.split('\n').map((line, i) => (
-                  <p key={i} className="mb-1">{line}</p>
-                ))}
-              </blockquote>
-              <p className="mt-3 text-sm font-semibold text-[#6B6258]">
-                – {review.author}, {review.date}
-              </p>
-            </motion.div>
-          ))}
-        </div>
-      </section>
-
-      {/* Contact */}
-      <section id="contact" className="bg-[#1A2B3C] py-16 text-white md:py-24">
-        <div className="mx-auto max-w-7xl px-4 lg:px-8">
+      <section id="testimonials" className="py-16 sm:py-20 lg:py-24">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="mb-12 text-center"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-100px' }}
+            variants={staggerContainer}
+            className="text-center"
           >
-            <h2 className={`${playfair.className} text-3xl font-bold md:text-4xl`}>
-              Visit Us
-            </h2>
-            <hr className="mx-auto mt-4 w-24 border-t-2 border-[#C89B3C]" />
+            <motion.h2
+              variants={fadeInUp}
+              className="font-['Playfair_Display'] text-3xl font-bold text-[#1A2B3C] sm:text-4xl lg:text-5xl"
+            >
+              What Our Customers Say
+            </motion.h2>
+            <motion.p
+              variants={fadeInUp}
+              className="mx-auto mt-4 max-w-2xl text-lg text-[#6B6258]"
+            >
+              Real reviews from loyal shoppers in Shahdara and beyond.
+            </motion.p>
           </motion.div>
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="space-y-4"
-            >
-              <div className="flex items-start gap-4">
-                <MapPin className="mt-1 text-[#C89B3C]" size={20} />
-                <div>
-                  <p className="font-semibold">Address</p>
-                  <p className="text-[#D4CCC2]">
-                    Brand Station, 1/7037, Shivaji Park, Shahdara, Delhi, 110032, India
-                  </p>
+
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-100px' }}
+            variants={staggerContainer}
+            className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3"
+          >
+            {testimonials.map((testimonial, index) => (
+              <motion.div
+                key={index}
+                variants={fadeInUp}
+                className="relative rounded-lg bg-white p-6 shadow-[0_2px_8px_rgba(26,43,60,0.06)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_24px_rgba(26,43,60,0.1)]"
+              >
+                <Quote className="absolute right-4 top-4 h-8 w-8 text-[#C89B3C]/20" />
+                <div className="flex items-center gap-1 text-[#C89B3C]">
+                  {[...Array(testimonial.rating)].map((_, i) => (
+                    <Star key={i} className="h-5 w-5 fill-current" />
+                  ))}
                 </div>
-              </div>
-              <div className="flex items-start gap-4">
-                <Phone className="mt-1 text-[#C89B3C]" size={20} />
-                <div>
-                  <p className="font-semibold">Phone</p>
-                  <a href="tel:09910309313" className="text-[#D4CCC2] hover:text-white transition-colors">
-                    099103 09313
-                  </a>
+                <p className="mt-4 text-sm leading-relaxed text-[#1E1E1E] italic">
+                  &ldquo;{testimonial.text}&rdquo;
+                </p>
+                <div className="mt-4 flex items-center justify-between text-xs text-[#6B6258]">
+                  <span className="font-semibold">— {testimonial.name}</span>
+                  <span>{testimonial.time}</span>
                 </div>
-              </div>
-              <div className="flex items-start gap-4">
-                <Star className="mt-1 text-[#C89B3C]" size={20} />
-                <div>
-                  <p className="font-semibold">Rating</p>
-                  <p className="text-[#D4CCC2]">4.6 ⭐ (186 reviews)</p>
-                </div>
-              </div>
-            </motion.div>
-            <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="flex items-center justify-center"
-            >
-              <div className="rounded-lg bg-white p-2 shadow-lg">
-                <Image
-                  src="https://img.magicpin.com/8087355_store_images_1.jpg"
-                  alt="Brand Station store"
-                  width={400}
-                  height={300}
-                  className="rounded-md object-cover"
-                />
-              </div>
-            </motion.div>
-          </div>
+              </motion.div>
+            ))}
+          </motion.div>
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-[#1A2B3C] border-t border-[#2C4052] py-8 text-[#D4CCC2]">
-        <div className="mx-auto max-w-7xl px-4 lg:px-8">
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
-            <div>
-              <h3 className={`${playfair.className} text-xl font-bold text-white`}>
+      {/* Contact / Footer */}
+      <footer id="contact" className="bg-[#1A2B3C]">
+        <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
+          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+            {/* Brand Info */}
+            <div className="space-y-4">
+              <h3 className="font-['Playfair_Display'] text-2xl font-bold text-white">
                 <span className="text-[#C89B3C]">Brand</span> Station
               </h3>
-              <p className="mt-2 text-sm">
-                Shahdara's destination for premium men's fashion since years.
+              <p className="text-sm text-[#D4CCC2]">
+                Shahdara's destination for premium men's fashion. Quality styles, unbeatable value.
               </p>
+              <div className="flex items-center gap-2 text-[#D4CCC2]">
+                <Star className="h-5 w-5 fill-[#C89B3C] text-[#C89B3C]" />
+                <span className="text-sm">4.6 (186 reviews)</span>
+              </div>
             </div>
-            <div>
-              <h4 className="mb-3 font-semibold text-white">Quick Links</h4>
-              <ul className="space-y-1 text-sm">
-                <li><Link href="#" className="hover:text-white transition-colors">Home</Link></li>
-                <li><Link href="#" className="hover:text-white transition-colors">Products</Link></li>
-                <li><Link href="#" className="hover:text-white transition-colors">Testimonials</Link></li>
-                <li><Link href="#" className="hover:text-white transition-colors">Contact</Link></li>
+
+            {/* Quick Links */}
+            <div className="space-y-4">
+              <h4 className="text-sm font-semibold uppercase tracking-wider text-white">
+                Quick Links
+              </h4>
+              <ul className="space-y-2 text-sm text-[#D4CCC2]">
+                <li>
+                  <Link href="#home" className="transition-colors hover:text-white">
+                    Home
+                  </Link>
+                </li>
+                <li>
+                  <Link href="#about" className="transition-colors hover:text-white">
+                    About
+                  </Link>
+                </li>
+                <li>
+                  <Link href="#products" className="transition-colors hover:text-white">
+                    Products
+                  </Link>
+                </li>
+                <li>
+                  <Link href="#testimonials" className="transition-colors hover:text-white">
+                    Testimonials
+                  </Link>
+                </li>
               </ul>
             </div>
-            <div>
-              <h4 className="mb-3 font-semibold text-white">Contact</h4>
-              <ul className="space-y-1 text-sm">
-                <li>1/7037, Shivaji Park, Shahdara</li>
-                <li>Delhi, 110032</li>
-                <li><a href="tel:09910309313" className="hover:text-white transition-colors">099103 09313</a></li>
+
+            {/* Contact Info */}
+            <div className="space-y-4">
+              <h4 className="text-sm font-semibold uppercase tracking-wider text-white">
+                Contact
+              </h4>
+              <ul className="space-y-3 text-sm text-[#D4CCC2]">
+                <li className="flex items-start gap-2">
+                  <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-[#C89B3C]" />
+                  <span>
+                    1/7037, Shivaji Park, Shahdara, Delhi, 110032, India
+                  </span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <Phone className="h-4 w-4 shrink-0 text-[#C89B3C]" />
+                  <a href="tel:09910309313" className="transition-colors hover:text-white">
+                    099103 09313
+                  </a>
+                </li>
               </ul>
             </div>
-            <div>
-              <h4 className="mb-3 font-semibold text-white">Hours</h4>
-              <ul className="space-y-1 text-sm">
-                <li>Mon – Sat: 10 AM – 8 PM</li>
-                <li>Sun: 11 AM – 6 PM</li>
+
+            {/* Business Hours */}
+            <div className="space-y-4">
+              <h4 className="text-sm font-semibold uppercase tracking-wider text-white">
+                Hours
+              </h4>
+              <ul className="space-y-2 text-sm text-[#D4CCC2]">
+                <li>Mon – Sat: 10:00 AM – 8:00 PM</li>
+                <li>Sunday: 11:00 AM – 6:00 PM</li>
               </ul>
             </div>
           </div>
-          <hr className="my-6 border-[#2C4052]" />
-          <p className="text-center text-xs">
-            © {new Date().getFullYear()} Brand Station. All rights reserved.
-          </p>
+
+          <div className="mt-10 border-t border-[#2C4052] pt-8 text-center text-xs text-[#6B6258]">
+            &copy; {new Date().getFullYear()} Brand Station. All rights reserved.
+          </div>
         </div>
       </footer>
     </div>
   );
-}
+};
+
+export default BrandStation;
