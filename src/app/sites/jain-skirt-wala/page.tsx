@@ -1,455 +1,646 @@
 "use client";
 
-import React from "react";
-import { motion, useInView } from "framer-motion";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import { Playfair_Display, Nunito } from "next/font/google";
+import { Yatra_One, Mukta } from "next/font/google";
 import {
-  ShoppingBag,
-  Shirt,
-  Baby,
-  Sparkles,
-  Sun,
-  Star,
-  MapPin,
-  Phone,
   Menu,
   X,
-  ArrowRight,
+  Sparkles,
+  Shirt,
+  Baby,
+  Gem,
+  HeartHandshake,
+  MapPin,
+  Phone,
+  Star,
+  ArrowRight
 } from "lucide-react";
 import { MapIframe } from "@/components/MapIframe";
 import { FloatingWhatsApp } from "@/components/FloatingWhatsApp";
 
-const playfair = Playfair_Display({
+// ---------- Fonts ----------
+const yatraOne = Yatra_One({
+  weight: "400",
   subsets: ["latin"],
-  variable: "--font-playfair",
-  display: "swap",
+  variable: "--font-yatra-one",
+});
+const mukta = Mukta({
+  subsets: ["latin"],
+  variable: "--font-mukta",
+  weight: ["300", "400", "500", "600", "700"],
 });
 
-const nunito = Nunito({
-  subsets: ["latin"],
-  variable: "--font-nunito",
-  display: "swap",
-});
+// ---------- Design Tokens (as constants for Tailwind) ----------
+const colors = {
+  bg: "#F3EDE2",
+  surface: "#F9F5EF",
+  primary: "#621B24",
+  secondary: "#C99C3A",
+  textPrimary: "#1A1A1A",
+  textSecondary: "#2B3B4C",
+  border: "#E5D4C0",
+};
 
+// ---------- Animation Variants ----------
+const fadeInUp = {
+  hidden: { opacity: 0, y: 24 },
+  visible: { opacity: 1, y: 0 },
+};
+
+// ---------- Business Data ----------
 const business = {
-  name: "Jain Skirt Wala",
+  name: "Jain Apparel House",
   phone: "098111 55206",
   address: "484, Telibara, Shahdara, Delhi, 110032, India",
 };
 
-const heroImage = "https://lh3.googleusercontent.com/XCsZe8xbOX-c9D4ucDde4qodNNEC9LO5StzTpD98yI8X3qePMNsHICnbPh-ogER2ZigS8os5NPuDYJOMzOKi3Hk9NTXO=w1200-rw";
-
-const sectionVariants = {
-  hidden: { opacity: 0, y: 40 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
+// ---------- Section Icons Map ----------
+const iconMap: Record<string, React.FC<{ className?: string }>> = {
+  Sparkles,
+  Shirt,
+  Baby,
+  Gem,
+  HeartHandshake,
 };
 
-const cardVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0 },
-};
-
+// ---------- The Page Component ----------
 export default function LandingPage() {
-  const aboutRef = React.useRef(null);
-  const servicesRef = React.useRef(null);
-  const testimonialsRef = React.useRef(null);
-
-  const aboutInView = useInView(aboutRef, { once: true, margin: "-100px" });
-  const servicesInView = useInView(servicesRef, { once: true, margin: "-100px" });
-  const testimonialsInView = useInView(testimonialsRef, { once: true, margin: "-100px" });
-
-  const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <>
-      <div className={`${nunito.className} bg-[#DBE9F2] text-[#3E332E] min-h-screen`}>
-        {/* Header */}
-        <header className="sticky top-0 z-50 bg-[#DBE9F2]/95 backdrop-blur-sm border-b border-[#E3DDD2]">
-          <nav className="max-w-[1280px] mx-auto px-4 md:px-8 flex items-center justify-between h-16">
-            <Link href="#" className="text-xl font-bold tracking-tight" style={{ fontFamily: "var(--font-playfair)" }}>
-              {business.name}
-            </Link>
-
-            {/* Desktop Nav */}
-            <div className="hidden md:flex items-center space-x-8 text-sm font-medium">
-              <a href="#about" className="hover:text-[#D97706] transition-colors">
-                About
-              </a>
-              <a href="#services" className="hover:text-[#D97706] transition-colors">
-                Collections
-              </a>
-              <a href="#testimonials" className="hover:text-[#D97706] transition-colors">
-                Reviews
-              </a>
-              <a href="#location" className="hover:text-[#D97706] transition-colors">
-                Visit
-              </a>
-              <a
-                href="tel:09811155206"
-                className="inline-flex items-center gap-2 bg-[#D97706] text-[#EDF3FA] px-4 py-2 rounded-[2px] text-sm shadow-[0_1px_4px_rgba(0,0,0,0.06)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.08)] transition-shadow"
-              >
-                <Phone size={16} />
-                {business.phone}
-              </a>
-            </div>
-
-            {/* Mobile Menu Button */}
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 rounded-[2px] hover:bg-[#EDF3FA] transition-colors"
-              aria-label="Toggle menu"
-            >
-              {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-            </button>
-          </nav>
-
-          {/* Mobile Menu Dropdown */}
-          {mobileMenuOpen && (
-            <motion.div
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="md:hidden bg-[#EDF3FA] border-t border-[#E3DDD2] px-4 py-4 flex flex-col space-y-3 text-sm font-medium"
-            >
-              <a href="#about" onClick={() => setMobileMenuOpen(false)} className="hover:text-[#D97706]">
-                About
-              </a>
-              <a href="#services" onClick={() => setMobileMenuOpen(false)} className="hover:text-[#D97706]">
-                Collections
-              </a>
-              <a href="#testimonials" onClick={() => setMobileMenuOpen(false)} className="hover:text-[#D97706]">
-                Reviews
-              </a>
-              <a href="#location" onClick={() => setMobileMenuOpen(false)} className="hover:text-[#D97706]">
-                Visit
-              </a>
-              <a
-                href="tel:09811155206"
-                className="inline-flex items-center gap-2 bg-[#D97706] text-[#EDF3FA] px-4 py-2 rounded-[2px] w-fit"
-              >
-                <Phone size={16} />
-                {business.phone}
-              </a>
-            </motion.div>
-          )}
-        </header>
-
-        {/* Hero Section */}
-        <section className="relative h-[80vh] min-h-[500px] overflow-hidden">
-          <Image
-            src={heroImage}
-            alt="Jain Skirt Wala store interior"
-            fill
-            className="object-cover object-center"
-            priority
-          />
-          <div className="absolute inset-0 bg-black/30" />
-          <div className="absolute inset-0 flex items-center">
-            <div className="max-w-[1280px] mx-auto px-4 md:px-8 w-full">
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.2 }}
-                className={`${playfair.className} text-white max-w-2xl`}
-              >
-                <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold leading-tight mb-4">
-                  Unique Clothes,
-                  <br />
-                  Honest Prices
-                </h1>
-                <p className={`${nunito.className} text-lg md:text-xl text-[#DBE9F2] mb-8`}>
-                  Shahdara&apos;s most loved clothing store for the whole family.
-                </p>
-                <Link
-                  href="#location"
-                  className="inline-flex items-center gap-3 bg-[#D97706] text-[#EDF3FA] px-6 py-3 rounded-[2px] font-semibold shadow-[0_1px_4px_rgba(0,0,0,0.06)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.08)] transition-shadow"
-                >
-                  Visit Our Store
-                  <ArrowRight size={20} />
-                </Link>
-              </motion.div>
-            </div>
-          </div>
-        </section>
-
-        {/* About Section */}
-        <section id="about" ref={aboutRef} className="py-16 md:py-24 px-4 md:px-8 max-w-[1280px] mx-auto">
-          <motion.div
-            initial="hidden"
-            animate={aboutInView ? "visible" : "hidden"}
-            variants={sectionVariants}
-            className="grid md:grid-cols-2 gap-12 items-center"
+    <main
+      className={`${mukta.className} relative min-h-screen`}
+      style={{ backgroundColor: colors.bg, color: colors.textPrimary }}
+    >
+      {/* ---------- Header ---------- */}
+      <header
+        className="fixed top-0 left-0 w-full z-50 shadow-[0_2px_8px_rgba(26,26,26,0.08)] transition-all"
+        style={{ backgroundColor: colors.surface, borderBottom: `1px solid ${colors.border}` }}
+      >
+        <nav className="max-w-[1280px] mx-auto px-4 md:px-8 flex items-center justify-between h-16">
+          {/* Logo / Brand */}
+          <Link
+            href="/"
+            className={`${yatraOne.className} text-xl`}
+            style={{ color: colors.primary }}
           >
-            <div>
-              <p className={`${nunito.className} text-[#6E6259] text-sm uppercase tracking-wider mb-2`}>
-                A family tradition of quality and style.
-              </p>
-              <h2 className={`${playfair.className} text-3xl md:text-4xl lg:text-5xl font-bold mb-6 leading-tight`}>
-                About Jain Skirt Wala
-              </h2>
-              <p className={`${nunito.className} text-[#3E332E] text-lg leading-relaxed`}>
-                We are a beloved clothing store in Shahdara, Delhi, offering a wide range of apparel for men, women, and kids.
-                From everyday casuals to stunning party wear, we bring you unique designs, top-quality fabrics, and prices that
-                fit your budget. Step in for a personalized shopping experience where every piece is chosen with care.
-              </p>
-            </div>
-            <div className="relative h-[300px] md:h-[400px] w-full overflow-hidden rounded-[2px] border border-[#E3DDD2]">
-              <Image
-                src="https://images.jdmagicbox.com/v2/comp/delhi/22/011p5503122/catalogue/jain-skirt-wala-shahdara-delhi-readymade-garment-retailers-1m3xi6d.jpg"
-                alt="Clothing rack at Jain Skirt Wala"
-                fill
-                className="object-cover"
-              />
-            </div>
-          </motion.div>
-        </section>
+            {business.name}
+          </Link>
 
-        {/* Services Section */}
-        <section id="services" ref={servicesRef} className="py-16 md:py-24 bg-[#EDF3FA]">
-          <div className="max-w-[1280px] mx-auto px-4 md:px-8">
-            <motion.div
-              initial="hidden"
-              animate={servicesInView ? "visible" : "hidden"}
-              variants={sectionVariants}
-              className="text-center mb-12"
-            >
-              <p className={`${nunito.className} text-[#6E6259] uppercase tracking-wider text-sm mb-2`}>
-                Discover our wide range of clothing for the whole family.
-              </p>
-              <h2 className={`${playfair.className} text-3xl md:text-4xl lg:text-5xl font-bold mb-4`}>
-                Collections for Everyone
-              </h2>
-            </motion.div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {[
-                {
-                  title: "Women's Fashion",
-                  icon: ShoppingBag,
-                  description:
-                    "Trendy kurtas, suits, skirts, and more. Find your perfect look for every occasion.",
-                },
-                {
-                  title: "Men's Apparel",
-                  icon: Shirt,
-                  description:
-                    "From formal wear to casual shirts, trousers, and accessories—all under one roof.",
-                },
-                {
-                  title: "Kids Collection",
-                  icon: Baby,
-                  description:
-                    "Adorable and comfortable clothes for children of all ages, loved by parents and kids alike.",
-                },
-                {
-                  title: "Party & Occasion Wear",
-                  icon: Sparkles,
-                  description:
-                    "Stand out at weddings, festivals, and special events with our stunning collection.",
-                },
-                {
-                  title: "Casual Daily Wear",
-                  icon: Sun,
-                  description:
-                    "Soft, breathable fabrics for your everyday style—comfort meets fashion.",
-                },
-              ].map((service, i) => (
-                <motion.div
-                  key={service.title}
-                  initial="hidden"
-                  animate={servicesInView ? "visible" : "hidden"}
-                  variants={{
-                    hidden: { opacity: 0, y: 20 },
-                    visible: {
-                      opacity: 1,
-                      y: 0,
-                      transition: { delay: i * 0.1, duration: 0.4 },
-                    },
-                  }}
-                  className="group bg-[#DBE9F2] border border-[#E3DDD2] rounded-[2px] p-6 hover:shadow-[0_4px_12px_rgba(0,0,0,0.08)] transition-shadow"
+          {/* Desktop Links */}
+          <ul className="hidden md:flex items-center gap-6 text-sm font-medium"
+            style={{ color: colors.textSecondary }}
+          >
+            {[
+              { label: "Services", href: "#services" },
+              { label: "About", href: "#about" },
+              { label: "Reviews", href: "#testimonials" },
+              { label: "Location", href: "#location" },
+              { label: "Contact", href: "#contact" },
+            ].map((item) => (
+              <li key={item.href}>
+                <a
+                  href={item.href}
+                  className="hover:underline underline-offset-4 transition-colors"
+                  style={{ color: colors.primary }}
                 >
-                  <service.icon className="w-8 h-8 text-[#D97706] mb-4" strokeWidth={1.5} />
-                  <h3 className={`${playfair.className} text-xl font-bold mb-2`}>{service.title}</h3>
-                  <p className={`${nunito.className} text-[#6E6259]`}>{service.description}</p>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </section>
+                  {item.label}
+                </a>
+              </li>
+            ))}
+            <li>
+              <a
+                href={`tel:${business.phone.replace(/\s/g, "")}`}
+                className="flex items-center gap-1 font-semibold"
+                style={{ color: colors.primary }}
+              >
+                <Phone size={14} /> {business.phone}
+              </a>
+            </li>
+          </ul>
 
-        {/* Testimonials Section */}
-        <section id="testimonials" ref={testimonialsRef} className="py-16 md:py-24 px-4 md:px-8 max-w-[1280px] mx-auto">
+          {/* Mobile Menu Toggle */}
+          <button
+            onClick={() => setMenuOpen(!menuOpen)}
+            className="md:hidden p-2"
+            style={{ color: colors.primary }}
+          >
+            {menuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </nav>
+
+        {/* Mobile Menu */}
+        <AnimatePresence>
+          {menuOpen && (
+            <motion.nav
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.2, ease: "easeOut" }}
+              className="md:hidden overflow-hidden border-t"
+              style={{ borderColor: colors.border }}
+            >
+              <ul className="flex flex-col gap-3 px-4 py-4 text-sm font-medium"
+                style={{ color: colors.textSecondary }}
+              >
+                {[
+                  { label: "Services", href: "#services" },
+                  { label: "About", href: "#about" },
+                  { label: "Reviews", href: "#testimonials" },
+                  { label: "Location", href: "#location" },
+                  { label: "Contact", href: "#contact" },
+                ].map((item) => (
+                  <li key={item.href}>
+                    <a
+                      href={item.href}
+                      onClick={() => setMenuOpen(false)}
+                      className="block py-1"
+                      style={{ color: colors.primary }}
+                    >
+                      {item.label}
+                    </a>
+                  </li>
+                ))}
+                <li>
+                  <a
+                    href={`tel:${business.phone.replace(/\s/g, "")}`}
+                    className="flex items-center gap-1 font-semibold text-base"
+                    style={{ color: colors.primary }}
+                  >
+                    <Phone size={16} /> {business.phone}
+                  </a>
+                </li>
+              </ul>
+            </motion.nav>
+          )}
+        </AnimatePresence>
+      </header>
+
+      {/* Spacer for fixed header */}
+      <div className="h-16" />
+
+      {/* ---------- HERO SECTION ---------- */}
+      <section className="relative w-full h-[85vh] md:h-[90vh] flex items-center justify-center overflow-hidden">
+        <Image
+          src="https://content.jdmagicbox.com/v2/comp/delhi/22/011p5503122/catalogue/jain-skirt-wala-shahdara-delhi-kids-readymade-garment-retailers-pte7ocskpw-250.jpg"
+          alt="Jain Apparel House storefront"
+          fill
+          className="object-cover"
+          priority
+        />
+        <div className="absolute inset-0 bg-black/40" />
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.3 }}
+          variants={fadeInUp}
+          transition={{ duration: 0.6 }}
+          className="relative z-10 text-center px-4 max-w-3xl"
+        >
+          <h1
+            className={`${yatraOne.className} text-4xl md:text-6xl lg:text-7xl mb-4`}
+            style={{ color: colors.surface }}
+          >
+            Jain Apparel House
+          </h1>
+          <p
+            className="text-lg md:text-xl font-light mb-2"
+            style={{ color: colors.surface }}
+          >
+            Your Family’s Favourite Clothing Store, Since 1985
+          </p>
+          <p
+            className="text-base md:text-lg mb-8"
+            style={{ color: colors.surface }}
+          >
+            Unique, trendy styles for men, women, and children — right here in Shahdara.
+          </p>
+          <a
+            href="#services"
+            className="inline-block px-8 py-3 font-semibold text-sm uppercase tracking-wider transition-colors duration-200 ease-out rounded-none"
+            style={{ backgroundColor: colors.primary, color: "#FEFAF4" }}
+          >
+            Explore Our Collections
+          </a>
+        </motion.div>
+      </section>
+
+      {/* ---------- ABOUT SECTION ---------- */}
+      <section id="about" className="py-16 md:py-24 px-4 md:px-8 max-w-[1280px] mx-auto grid md:grid-cols-2 gap-12 items-center">
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
+          variants={fadeInUp}
+          transition={{ duration: 0.5 }}
+          className="order-2 md:order-1"
+        >
+          <h2
+            className={`${yatraOne.className} text-3xl md:text-4xl mb-3`}
+            style={{ color: colors.primary }}
+          >
+            A Shahdara Tradition of Quality
+          </h2>
+          <p
+            className="text-lg italic mb-4"
+            style={{ color: colors.textSecondary }}
+          >
+            Not just another clothing store — a family destination
+          </p>
+          <p className="leading-relaxed" style={{ color: colors.textPrimary }}>
+            For over 40 years, Jain Apparel House (fondly known as Jain Skirt Wala) has been the
+            go‑to spot for discerning families. Nestled in the heart of Shahdara, we believe every
+            piece of clothing should have its own character. From daily wear to dazzling party
+            outfits, we source and curate unique designs you won’t find anywhere else. Our
+            customers say it best — great quality, warm service, and a collection that keeps them
+            coming back.
+          </p>
+        </motion.div>
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
+          variants={fadeInUp}
+          transition={{ duration: 0.5, delay: 0.1 }}
+          className="order-1 md:order-2 relative h-[350px] w-full rounded overflow-hidden shadow-[0_2px_8px_rgba(26,26,26,0.08)]"
+        >
+          <Image
+            src="https://images.jdmagicbox.com/v2/comp/delhi/22/011p5503122/catalogue/jain-skirt-wala-shahdara-delhi-readymade-garment-retailers-1m3xi6d.jpg"
+            alt="Shop interior"
+            fill
+            className="object-cover"
+          />
+        </motion.div>
+      </section>
+
+      {/* ---------- SERVICES SECTION (MODULAR GRID / FABRIC SWATCHES) ---------- */}
+      <section id="services" className="py-16 md:py-24 px-4 md:px-8 max-w-[1280px] mx-auto">
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.5 }}
+          className="text-center mb-12"
+        >
+          <h2
+            className={`${yatraOne.className} text-3xl md:text-4xl mb-2`}
+            style={{ color: colors.primary }}
+          >
+            What We Offer
+          </h2>
+          <p className="text-lg" style={{ color: colors.textSecondary }}>
+            Everything from formals to festive, for the whole family
+          </p>
+        </motion.div>
+
+        {/* Modular grid – varying proportions like fabric swatches */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          {/* Card 1 – Women's Wear (tall, wide) */}
           <motion.div
             initial="hidden"
-            animate={testimonialsInView ? "visible" : "hidden"}
-            variants={sectionVariants}
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
+            variants={{
+              hidden: { opacity: 0, y: 20 },
+              visible: { opacity: 1, y: 0, transition: { duration: 0.4 } },
+            }}
+            className="p-6 rounded border shadow-[0_2px_8px_rgba(26,26,26,0.08)] flex flex-col justify-center
+                       min-h-[400px] md:col-span-1 lg:col-span-2 lg:row-span-2"
+            style={{ backgroundColor: colors.surface, borderColor: colors.border }}
+          >
+            {iconMap["Sparkles"] && <iconMap.Sparkles className="w-8 h-8 mb-4" style={{ color: colors.primary }} />}
+            <h3 className={`${yatraOne.className} text-xl mb-2`} style={{ color: colors.primary }}>Women’s Wear</h3>
+            <p className="text-sm leading-relaxed" style={{ color: colors.textSecondary }}>
+              Skirts, casual tops, and stunning party wear. Each piece is handpicked for style and comfort.
+            </p>
+          </motion.div>
+
+          {/* Card 2 – Men’s Wear (compact) */}
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
+            variants={{
+              hidden: { opacity: 0, y: 20 },
+              visible: { opacity: 1, y: 0, transition: { duration: 0.4, delay: 0.1 } },
+            }}
+            className="p-6 rounded border shadow-[0_2px_8px_rgba(26,26,26,0.08)] min-h-[220px]"
+            style={{ backgroundColor: colors.surface, borderColor: colors.border }}
+          >
+            {iconMap["Shirt"] && <iconMap.Shirt className="w-8 h-8 mb-4" style={{ color: colors.primary }} />}
+            <h3 className={`${yatraOne.className} text-xl mb-2`} style={{ color: colors.primary }}>Men’s Wear</h3>
+            <p className="text-sm leading-relaxed" style={{ color: colors.textSecondary }}>
+              Sharp formals, relaxed casuals, and accessories. Top brands at unbeatable prices.
+            </p>
+          </motion.div>
+
+          {/* Card 3 – Kids’ Collection (compact) */}
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
+            variants={{
+              hidden: { opacity: 0, y: 20 },
+              visible: { opacity: 1, y: 0, transition: { duration: 0.4, delay: 0.2 } },
+            }}
+            className="p-6 rounded border shadow-[0_2px_8px_rgba(26,26,26,0.08)] min-h-[220px]"
+            style={{ backgroundColor: colors.surface, borderColor: colors.border }}
+          >
+            {iconMap["Baby"] && <iconMap.Baby className="w-8 h-8 mb-4" style={{ color: colors.primary }} />}
+            <h3 className={`${yatraOne.className} text-xl mb-2`} style={{ color: colors.primary }}>Kids’ Collection</h3>
+            <p className="text-sm leading-relaxed" style={{ color: colors.textSecondary }}>
+              From everyday playwear to festive outfits, our kids’ range is a hit with little ones and parents.
+            </p>
+          </motion.div>
+
+          {/* Card 4 – Unique Designs (wide, short) */}
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
+            variants={{
+              hidden: { opacity: 0, y: 20 },
+              visible: { opacity: 1, y: 0, transition: { duration: 0.4, delay: 0.1 } },
+            }}
+            className="p-6 rounded border shadow-[0_2px_8px_rgba(26,26,26,0.08)] lg:col-span-2 min-h-[180px]"
+            style={{ backgroundColor: colors.surface, borderColor: colors.border }}
+          >
+            {iconMap["Gem"] && <iconMap.Gem className="w-8 h-8 mb-4" style={{ color: colors.primary }} />}
+            <h3 className={`${yatraOne.className} text-xl mb-2`} style={{ color: colors.primary }}>Unique Designs</h3>
+            <p className="text-sm leading-relaxed" style={{ color: colors.textSecondary }}>
+              We search far and wide to bring you clothes that stand out. No two pieces are alike.
+            </p>
+          </motion.div>
+
+          {/* Card 5 – Personal Touch (wide, short) */}
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
+            variants={{
+              hidden: { opacity: 0, y: 20 },
+              visible: { opacity: 1, y: 0, transition: { duration: 0.4, delay: 0.2 } },
+            }}
+            className="p-6 rounded border shadow-[0_2px_8px_rgba(26,26,26,0.08)] lg:col-span-2 min-h-[180px]"
+            style={{ backgroundColor: colors.surface, borderColor: colors.border }}
+          >
+            {iconMap["HeartHandshake"] && <iconMap.HeartHandshake className="w-8 h-8 mb-4" style={{ color: colors.primary }} />}
+            <h3 className={`${yatraOne.className} text-xl mb-2`} style={{ color: colors.primary }}>Personal Touch</h3>
+            <p className="text-sm leading-relaxed" style={{ color: colors.textSecondary }}>
+              Our friendly owner and staff make sure you leave with a smile and the perfect fit.
+            </p>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ---------- TESTIMONIALS SECTION (LEDGER / PATTERN CARDS) ---------- */}
+      <section id="testimonials" className="py-16 md:py-24 px-4 md:px-8"
+        style={{ backgroundColor: colors.surface }}
+      >
+        <div className="max-w-[1280px] mx-auto">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.5 }}
             className="text-center mb-12"
           >
-            <p className={`${nunito.className} text-[#6E6259] uppercase tracking-wider text-sm mb-2`}>
-              Real reviews from real people.
-            </p>
-            <h2 className={`${playfair.className} text-3xl md:text-4xl lg:text-5xl font-bold mb-4`}>
-              Why Our Customers Love Us
+            <h2
+              className={`${yatraOne.className} text-3xl md:text-4xl mb-2`}
+              style={{ color: colors.primary }}
+            >
+              What Our Customers Say
             </h2>
+            <p className="text-lg" style={{ color: colors.textSecondary }}>
+              Real reviews from people who love us
+            </p>
           </motion.div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
               {
-                title: "Unique Selection",
+                title: "Amazing Variety & Quality",
                 description:
-                  "They sell amazing clothes. Every cloth is different from the other. I personally feel it's a bit expensive but it's always crowded which means that people value quality over pockets.",
-              },
-              {
-                title: "Best Value",
-                description:
-                  "Many gent's wear brand under one roof from top to bottom at a very reasonable price. Nice dealing of staff with customers.",
-              },
-              {
-                title: "Trendy Designs",
-                description:
-                  "Unique and trendy clothes ….. owner is very nice and humble and staff is very good.",
+                  "They sell amazing clothes. Every cloth is different from the other. People value quality over pockets. That's why it's always crowded.",
               },
               {
                 title: "One-Stop Shop",
                 description:
-                  "Best shop for all your clothing needs. Here you can find all the varieties whether its (Formal, Casual, Daily wear or even the auspicious party wear). All the products are available at unbeatable prices and the product quality is topnotch.",
+                  "Best shop for all your clothing needs — formal, casual, daily wear, or party wear. Products at unbeatable prices and top-notch quality. Customer service is the best!",
+              },
+              {
+                title: "Gentlemen’s Paradise",
+                description:
+                  "Many men's wear brands under one roof, top to bottom, at very reasonable prices. The staff are great to deal with.",
               },
               {
                 title: "Favourite for Kids",
-                description: "All time my favourite shop for kids collection!",
+                description:
+                  "All time favourite shop for kids collection! The styles are just too cute.",
               },
-            ].map((testimonial, i) => (
-              <motion.div
-                key={testimonial.title}
+              {
+                title: "Warm & Humble Service",
+                description:
+                  "Unique and trendy clothes. The owner is very nice and humble, and the staff is excellent.",
+              },
+            ].map((t, idx) => (
+              <motion.blockquote
+                key={idx}
                 initial="hidden"
-                animate={testimonialsInView ? "visible" : "hidden"}
-                variants={{
-                  hidden: { opacity: 0, y: 20 },
-                  visible: {
-                    opacity: 1,
-                    y: 0,
-                    transition: { delay: i * 0.1, duration: 0.4 },
-                  },
-                }}
-                className="bg-[#EDF3FA] border border-[#E3DDD2] rounded-[2px] p-6 flex flex-col justify-between"
+                whileInView="visible"
+                viewport={{ once: true, amount: 0.2 }}
+                variants={fadeInUp}
+                transition={{ delay: idx * 0.1, duration: 0.4 }}
+                className="relative p-6 rounded border overflow-hidden"
+                style={{ backgroundColor: colors.bg, borderColor: colors.border }}
               >
-                <div>
-                  <div className="flex gap-1 mb-3">
-                    {[...Array(5)].map((_, starI) => (
-                      <Star key={starI} size={16} className="fill-[#D97706] text-[#D97706]" />
-                    ))}
-                  </div>
-                  <h3 className={`${playfair.className} text-lg font-bold mb-2`}>{testimonial.title}</h3>
-                  <p className={`${nunito.className} text-[#6E6259]`}>{testimonial.description}</p>
+                {/* Left accent bar – ledger style */}
+                <div className="absolute left-0 top-0 bottom-0 w-1" style={{ backgroundColor: colors.primary }} />
+                <span className="text-xs uppercase tracking-widest mb-2 block" style={{ color: colors.textSecondary }}>
+                  Customer Note
+                </span>
+                <div className="flex gap-1 mb-3">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} size={14} fill={colors.secondary} color={colors.secondary} />
+                  ))}
                 </div>
-              </motion.div>
+                <p className="text-sm leading-relaxed italic" style={{ color: colors.textSecondary }}>
+                  “{t.description}”
+                </p>
+                <footer className="mt-3 font-semibold" style={{ color: colors.primary }}>
+                  — {t.title}
+                </footer>
+              </motion.blockquote>
             ))}
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* Location Map Section */}
-        <section id="location" className="py-16 md:py-24 bg-[#EDF3FA]">
-          <div className="max-w-[1280px] mx-auto px-4 md:px-8">
-            <div className="text-center mb-10">
-              <p className={`${nunito.className} text-[#6E6259] uppercase tracking-wider text-sm mb-2`}>
-                Come see the collection for yourself.
-              </p>
-              <h2 className={`${playfair.className} text-3xl md:text-4xl lg:text-5xl font-bold mb-4`}>
-                Visit Our Store
-              </h2>
-            </div>
-            <div className="rounded-[2px] overflow-hidden border border-[#E3DDD2] h-[400px] w-full">
-              <MapIframe lat={28.67069} lng={77.29055} className="w-full h-full" />
-            </div>
-            <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-4 text-center">
-              <Link
-                href="https://www.google.com/maps?q=28.67069,77.29055"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 bg-[#1E3A5F] text-[#EDF3FA] px-5 py-3 rounded-[2px] shadow-[0_1px_4px_rgba(0,0,0,0.06)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.08)] transition-shadow"
-              >
-                <MapPin size={18} />
-                Get Directions
-              </Link>
-              <span className={`${nunito.className} text-[#6E6259]`}>{business.address}</span>
-            </div>
-          </div>
-        </section>
-
-        {/* Call to Action Section */}
-        <section id="cta" className="py-16 md:py-24 px-4 md:px-8 max-w-[1280px] mx-auto text-center">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5 }}
-            viewport={{ once: true }}
-            className="bg-[#1E3A5F] text-[#EDF3FA] rounded-[2px] p-10 md:p-16 shadow-[0_4px_12px_rgba(0,0,0,0.08)]"
+      {/* ---------- LOCATION MAP SECTION ---------- */}
+      <section id="location" className="py-16 md:py-24 px-4 md:px-8 max-w-[1280px] mx-auto">
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.5 }}
+          className="text-center mb-10"
+        >
+          <h2
+            className={`${yatraOne.className} text-3xl md:text-4xl mb-2`}
+            style={{ color: colors.primary }}
           >
-            <h2 className={`${playfair.className} text-3xl md:text-4xl lg:text-5xl font-bold mb-4`}>
-              Ready for a Style Update?
-            </h2>
-            <p className={`${nunito.className} text-lg mb-8 max-w-xl mx-auto text-[#DBE9F2]`}>
-              Call us or drop by—we’re here to help you find the perfect outfit.
-            </p>
-            <Link
-              href="tel:09811155206"
-              className="inline-flex items-center gap-3 bg-[#D97706] text-[#EDF3FA] px-8 py-4 rounded-[2px] font-semibold text-lg shadow-[0_1px_4px_rgba(0,0,0,0.06)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.08)] transition-shadow"
+            Find Us in Shahdara
+          </h2>
+          <p className="text-lg" style={{ color: colors.textSecondary }}>
+            Easily accessible, right in the heart of the community
+          </p>
+        </motion.div>
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
+          variants={fadeInUp}
+          transition={{ duration: 0.5 }}
+          className="rounded overflow-hidden shadow-[0_2px_8px_rgba(26,26,26,0.08)] border"
+          style={{ borderColor: colors.border }}
+        >
+          <MapIframe lat={28.67069} lng={77.29055} className="w-full h-[400px]" />
+        </motion.div>
+      </section>
+
+      {/* ---------- CONTACT FORM SECTION ---------- */}
+      <section id="contact" className="py-16 md:py-24 px-4 md:px-8"
+        style={{ backgroundColor: colors.surface }}
+      >
+        <div className="max-w-[720px] mx-auto text-center">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.5 }}
+          >
+            <h2
+              className={`${yatraOne.className} text-3xl md:text-4xl mb-2`}
+              style={{ color: colors.primary }}
             >
-              <Phone size={22} />
-              Call Now
-            </Link>
+              Get In Touch
+            </h2>
+            <p className="text-lg mb-1" style={{ color: colors.textSecondary }}>
+              Have a question or need styling advice? Call or drop us a line.
+            </p>
+            <p className="text-base mb-8" style={{ color: colors.textSecondary }}>
+              We’re here to help. Call us at {business.phone} or fill the form below.
+            </p>
           </motion.div>
-        </section>
+          <motion.form
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
+            variants={fadeInUp}
+            transition={{ duration: 0.5 }}
+            className="space-y-6 text-left"
+          >
+            <div>
+              <label className="block text-sm font-medium mb-1" style={{ color: colors.textPrimary }}>
+                Your Name
+              </label>
+              <input
+                type="text"
+                placeholder="e.g. Priya Sharma"
+                className="w-full px-4 py-3 rounded-sm border focus:outline-none focus:ring-0 transition-colors duration-200"
+                style={{
+                  borderColor: colors.border,
+                  backgroundColor: colors.bg,
+                  color: colors.textPrimary,
+                }}
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1" style={{ color: colors.textPrimary }}>
+                Your Message
+              </label>
+              <textarea
+                rows={4}
+                placeholder="How can we help you?"
+                className="w-full px-4 py-3 rounded-sm border focus:outline-none focus:ring-0 transition-colors duration-200 resize-none"
+                style={{
+                  borderColor: colors.border,
+                  backgroundColor: colors.bg,
+                  color: colors.textPrimary,
+                }}
+              />
+            </div>
+            <button
+              type="submit"
+              className="w-full px-8 py-3 font-semibold text-sm uppercase tracking-wider transition-colors duration-200 ease-out rounded-none"
+              style={{ backgroundColor: colors.primary, color: "#FEFAF4" }}
+            >
+              Send Message
+            </button>
+          </motion.form>
+        </div>
+      </section>
 
-        {/* Footer */}
-        <footer className="bg-[#1E3A5F] text-[#DBE9F2] py-12 px-4 md:px-8">
-          <div className="max-w-[1280px] mx-auto grid md:grid-cols-3 gap-8 items-start">
-            <div>
-              <h3 className={`${playfair.className} text-2xl font-bold mb-2`}>{business.name}</h3>
-              <p className={nunito.className}>A family tradition of quality and style.</p>
-            </div>
-            <div>
-              <h4 className={`${playfair.className} font-bold mb-2`}>Contact</h4>
-              <ul className={`${nunito.className} space-y-2`}>
-                <li className="flex items-center gap-2">
-                  <Phone size={16} />
-                  <a href="tel:09811155206" className="hover:text-[#D97706] transition-colors">
-                    {business.phone}
-                  </a>
-                </li>
-                <li className="flex items-center gap-2">
-                  <MapPin size={16} />
-                  <span>{business.address}</span>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h4 className={`${playfair.className} font-bold mb-2`}>Quick Links</h4>
-              <ul className={`${nunito.className} space-y-2`}>
-                <li>
-                  <a href="#about" className="hover:text-[#D97706] transition-colors">About</a>
-                </li>
-                <li>
-                  <a href="#services" className="hover:text-[#D97706] transition-colors">Collections</a>
-                </li>
-                <li>
-                  <a href="#testimonials" className="hover:text-[#D97706] transition-colors">Reviews</a>
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div className={`${nunito.className} border-t border-[#E3DDD2] mt-8 pt-6 text-center text-sm text-[#6E6259]`}>
-            © {new Date().getFullYear()} {business.name}. All rights reserved.
-          </div>
-        </footer>
-      </div>
+      {/* ---------- CALL TO ACTION SECTION ---------- */}
+      <section className="py-16 md:py-24 px-4 text-center"
+        style={{ backgroundColor: colors.bg }}
+      >
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.5 }}
+          className="max-w-[720px] mx-auto"
+        >
+          <h2
+            className={`${yatraOne.className} text-3xl md:text-4xl mb-2`}
+            style={{ color: colors.primary }}
+          >
+            Visit Us Today
+          </h2>
+          <p className="text-lg mb-8" style={{ color: colors.textSecondary }}>
+            Experience the warmth and variety that keeps Shahdara coming back.
+          </p>
+          <a
+            href={`tel:${business.phone.replace(/\s/g, "")}`}
+            className="inline-flex items-center gap-2 px-8 py-3 font-semibold text-sm uppercase tracking-wider transition-colors duration-200 ease-out rounded-none"
+            style={{ backgroundColor: colors.primary, color: "#FEFAF4" }}
+          >
+            <Phone size={18} /> Call for Directions
+          </a>
+        </motion.div>
+      </section>
 
-      {/* Floating WhatsApp */}
-      <FloatingWhatsApp
-        phoneNumber="09811155206"
-        message="Hi, I'm looking for some new clothes!"
-        className="z-50"
-      />
-    </>
+      {/* ---------- FOOTER ---------- */}
+      <footer
+        className="py-8 px-4 md:px-8 border-t"
+        style={{ borderColor: colors.border, backgroundColor: colors.surface }}
+      >
+        <div className="max-w-[1280px] mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-sm"
+          style={{ color: colors.textSecondary }}
+        >
+          <p className="text-center md:text-left">
+            &copy; {new Date().getFullYear()} {business.name}. All rights reserved.
+          </p>
+          <div className="flex items-center gap-4">
+            <a
+              href={`tel:${business.phone.replace(/\s/g, "")}`}
+              className="flex items-center gap-1 hover:underline"
+              style={{ color: colors.primary }}
+            >
+              <Phone size={16} /> {business.phone}
+            </a>
+            <span className="flex items-center gap-1">
+              <MapPin size={16} /> {business.address}
+            </span>
+          </div>
+        </div>
+      </footer>
+
+      {/* ---------- FLOATING WHATSAPP ---------- */}
+      <FloatingWhatsApp phoneNumber={business.phone} />
+    </main>
   );
 }
